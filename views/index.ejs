@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WhatsApp Chat Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center py-10 px-4">
+
+  <header class="w-full max-w-4xl mb-8 text-center">
+    <h1 class="text-4xl font-bold text-gray-800">WhatsApp Chat Manager</h1>
+    <p class="text-gray-600 mt-2">Upload, search, and manage your WhatsApp chats easily.</p>
+  </header>
+
+  <section class="w-full max-w-4xl bg-white rounded-lg shadow p-6 mb-10">
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row items-center gap-4 mb-6">
+      <input type="file" name="chat" accept=".txt" required class="flex-1 border border-gray-300 p-2 rounded-md" />
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md">
+        Upload Chat
+      </button>
+    </form>
+
+    <form action="/search" method="GET" class="flex flex-col md:flex-row items-center gap-4">
+      <input type="text" name="q" placeholder="Search sender, date, or message..." required
+        class="flex-1 border border-gray-300 p-2 rounded-md" />
+      <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md">
+        Search
+      </button>
+      <a href="/all" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md text-center">
+        View All
+      </a>
+    </form>
+  </section>
+
+  <% if (results && results.length > 0) { %>
+    <section class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% results.forEach(result => { %>
+        <div class="bg-white rounded-xl shadow-md p-5 border border-gray-200 flex flex-col space-y-2 hover:shadow-lg transition-shadow duration-300">
+          <div class="text-sm text-gray-500">
+            <%= result.message_date %>
+          </div>
+          <div class="font-semibold text-gray-800 truncate">
+            <%= result.sender %>
+          </div>
+          <div class="text-gray-700 break-words whitespace-pre-wrap">
+            <%= result.message %>
+          </div>
+        </div>
+      <% }); %>
+    </section>
+  <% } else if (typeof results !== 'undefined') { %>
+    <p class="mt-8 text-gray-500 text-lg font-semibold">No messages found.</p>
+  <% } %>
+
+</body>
+</html>
